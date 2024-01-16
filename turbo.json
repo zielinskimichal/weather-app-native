@@ -1,0 +1,9 @@
+{
+  "$schema": "https://turbo.org/schema.json",
+  "pipeline": {
+    "dev": {
+      "cache": false
+    },
+    "lint": {}
+  }
+}
