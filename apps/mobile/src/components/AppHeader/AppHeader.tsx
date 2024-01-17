@@ -11,7 +11,5 @@ export const AppHeader = () => {
 const styles = StyleSheet.create({
   heading: {
     color: "#2F4F4F",
-    marginLeft: 20,
-    marginTop: 40,
   },
 });
