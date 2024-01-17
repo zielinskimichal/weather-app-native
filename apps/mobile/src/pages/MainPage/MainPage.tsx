@@ -28,26 +28,28 @@ export const MainPage = () => {
   useEffect(() => {
     const fetchWeatherInfo = async () => {
       setLoading(true);
+      try {
+        if (city) {
+          const data = await getWeatherForCity(city);
+          setWeatherInfo(data);
+          setError(data ? null : "Please enter a valid city");
+        } else if (longitude && latitude) {
+          const data = await getWeatherForCoordinates({
+            latitude,
+            longitude,
+          });
+          setWeatherInfo(data);
+          setError(data ? null : "Unexpected error occurred");
+        } else {
+          setWeatherInfo(null);
+          setError(null);
+        }
 
-      if (city) {
-        const data = await getWeatherForCity(city);
-        setWeatherInfo(data);
-        setError(data ? null : "Please enter a valid city");
-      } else if (longitude && latitude) {
-        const data = await getWeatherForCoordinates({
-          latitude,
-          longitude,
-        });
-        setWeatherInfo(data);
-        setError(data ? null : "Unexpected error occurred");
-      } else {
-        setWeatherInfo(null);
-        setError(null);
+        setLoading(false);
+      } catch (e) {
+        setError("Check your internet connection!");
       }
-
-      setLoading(false);
     };
-
     fetchWeatherInfo();
   }, [longitude, latitude, city]);
 

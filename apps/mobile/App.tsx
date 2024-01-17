@@ -1,6 +1,6 @@
 import { PaperProvider } from "react-native-paper";
 
-import { MainLayout } from "./src/MainLayout";
+import { MainLayout } from "./src/layouts/MainLayout";
 import { MainPage } from "./src/pages/MainPage";
 
 export default function App() {
