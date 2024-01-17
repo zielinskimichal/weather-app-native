@@ -1,36 +1,51 @@
 import { Image, StyleSheet, View } from "react-native";
-import { Card, Text } from "react-native-paper";
+import { Card, Text, ActivityIndicator, MD2Colors } from "react-native-paper";
 
 import { WeatherInfoDisplayProps } from "./WeatherInfoDisplay.types";
-
-export const WeatherInfoDisplay = ({ data }: WeatherInfoDisplayProps) => {
-  if (!data) {
-    return null;
+export const WeatherInfoDisplay = ({
+  data,
+  loading,
+  error,
+}: WeatherInfoDisplayProps) => {
+  if (error || (!data && !loading)) {
+    return (
+      <Card style={styles.card}>
+        <Text style={styles.error} variant="titleLarge">
+          {error
+            ? error
+            : "Please allow the app to use your location or search for a city!"}
+        </Text>
+      </Card>
+    );
   }
-  const { iconUrl, conditions, humidity, windSpeed, temperature, city } = data;
+
+  if (loading) {
+    return <ActivityIndicator animating style={styles.loader} size={50} />;
+  }
+
   return (
     <Card style={styles.card}>
       <Text style={styles.city} variant="titleLarge">
-        {city}
+        {data?.city}
       </Text>
       <View style={styles.imageWrapper}>
         <Image
           source={{
-            uri: iconUrl,
+            uri: data?.iconUrl,
           }}
           style={styles.image}
         />
         <View style={styles.conditionsWrapper}>
           <Text variant="bodyLarge" style={styles.bold}>
-            {temperature}&#8451;&nbsp;
+            {data?.temperature}&#8451;&nbsp;
           </Text>
-          <Text variant="bodyLarge">{conditions}</Text>
+          <Text variant="bodyLarge">{data?.conditions}</Text>
         </View>
       </View>
       <View style={{ alignItems: "center" }}>
         <View style={styles.humidityAndWindWrapper}>
-          <Text>Humidity: {humidity}%</Text>
-          <Text>Wind Speed: {windSpeed} km/h</Text>
+          <Text>Humidity: {data?.humidity}%</Text>
+          <Text>Wind Speed: {data?.windSpeed} km/h</Text>
         </View>
       </View>
     </Card>
@@ -69,5 +84,11 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontWeight: "bold",
+  },
+  error: {
+    textAlign: "center",
+  },
+  loader: {
+    marginTop: 40,
   },
 });
