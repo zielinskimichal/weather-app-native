@@ -50,7 +50,6 @@ export const MainPage = () => {
 
     fetchWeatherInfo();
   }, [longitude, latitude, city]);
-  console.log(longitude, latitude);
 
   return (
     <View>
