@@ -8,5 +8,5 @@ export type WeatherInfo = {
 };
 
 export type WeatherInfoDisplayProps = {
-  data: WeatherInfo;
+  data: WeatherInfo | null;
 };

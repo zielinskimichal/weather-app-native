@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { WeatherResponseDto } from './dto/weather.response.dto';
-import { WeatherApiResponseDto } from './dto/WeatherApiResponse.dto';
+import { WeatherapiResponseDto } from './dto/weatherapi-response.dto';
 
 @Injectable()
 export class WeatherService {
@@ -13,7 +13,7 @@ export class WeatherService {
     this.apiKey = _apiKey;
   }
 
-  private async fetchWeather(q: string): Promise<WeatherApiResponseDto> {
+  private async fetchWeather(q: string): Promise<WeatherapiResponseDto> {
     const res = await fetch(
       `http://api.weatherapi.com/v1/current.json?key=${this.apiKey}&q=${q}`,
     );
@@ -22,18 +22,17 @@ export class WeatherService {
       throw new Error('Error fetching weather');
     }
 
-    return (await res.json()) as WeatherApiResponseDto;
+    return (await res.json()) as WeatherapiResponseDto;
   }
 
   private createWeatherResponse(
-    weatherData: WeatherApiResponseDto,
+    weatherData: WeatherapiResponseDto,
   ): WeatherResponseDto {
     const weatherResponse: WeatherResponseDto = {
       city: weatherData.location.name,
       temperature: weatherData.current.temp_c,
       conditions: weatherData.current.condition.text,
-      // the external api adds '//' to the begining of the icon url for some reason
-      iconUrl: weatherData.current.condition.icon.replace('//', ''),
+      iconUrl: `https:${weatherData.current.condition.icon}`,
       humidity: weatherData.current.humidity,
       windSpeed: weatherData.current.wind_kph,
     };

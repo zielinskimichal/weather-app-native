@@ -3,9 +3,11 @@ import { Card, Text } from "react-native-paper";
 
 import { WeatherInfoDisplayProps } from "./WeatherInfoDisplay.types";
 
-export const WeatherInfoDisplay = ({
-  data: { iconUrl, conditions, humidity, windSpeed, temperature, city },
-}: WeatherInfoDisplayProps) => {
+export const WeatherInfoDisplay = ({ data }: WeatherInfoDisplayProps) => {
+  if (!data) {
+    return null;
+  }
+  const { iconUrl, conditions, humidity, windSpeed, temperature, city } = data;
   return (
     <Card style={styles.card}>
       <Text style={styles.city} variant="titleLarge">
