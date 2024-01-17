@@ -28,17 +28,25 @@ Weather App is a mobile application built with React Native and Expo, allowing u
    cd weather-app
    yarn install
    ```   
-3. Start the NestJs api server:
+3. Prepare and start the NestJs api server:
    ```bash
    cd apps/backend
+   cp .env.template .env
+   ```
+   fill the missing env variables, then run:
+   ```bash
    yarn dev
    ```
-4. Start the Expo server:
+5. Start the Expo server:
    ```bash
    cd ../mobile
+   cp .env.template .env
+   ```
+   fill the missing env variables, then run:
+   ```bash
    yarn dev
-   ```   
-5. You will see the output of Expo server running. Now you can either:
+   ```
+6. You will see the output of Expo server running. Now you can either:
     
    - scan the QR code with expo go app on your phone
       - for this option you'd need to set up a tunnel to your local machine's port 3000.
