@@ -9,4 +9,6 @@ export type WeatherInfo = {
 
 export type WeatherInfoDisplayProps = {
   data: WeatherInfo | null;
+  loading?: boolean;
+  error: string | null;
 };
