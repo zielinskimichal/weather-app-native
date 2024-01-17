@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { MainLayoutProps } from "./MainLayout.types";
-import { AppHeader } from "../components/AppHeader";
+import { AppHeader } from "../../components/AppHeader";
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
