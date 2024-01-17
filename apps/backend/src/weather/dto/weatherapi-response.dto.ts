@@ -1,4 +1,4 @@
-export class WeatherApiResponseDto {
+export class WeatherapiResponseDto {
   location: {
     name: string;
     region: string;

@@ -4,30 +4,52 @@ import { Searchbar } from "react-native-paper";
 
 import { WeatherInfoDisplay } from "../../components/WeatherInfoDisplay/WeatherInfoDisplay";
 import { weatherInfoDisplayMocks } from "../../components/WeatherInfoDisplay/WeatherInfoDisplay.mocks";
-import { getUserLocation } from "../../utils";
+import { WeatherInfo } from "../../components/WeatherInfoDisplay/WeatherInfoDisplay.types";
+import { getUserLocation, LocationType } from "../../utils";
+import { getWeatherForCity } from "../../utils/getWeatherForCity";
+import { getWeatherForCoordinates } from "../../utils/getWeatherForCoordinates";
 
 export const MainPage = () => {
-  const [location, setLocation] = useState<any>(null);
+  const [location, setLocation] = useState<LocationType | null>(null);
+  const [weatherInfo, setWeatherInfo] = useState<WeatherInfo | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [city, setCity] = useState<string | null>(null);
 
-  const [citySearch, setCitySearch] = useState("");
+  const { longitude, latitude } = location || {};
 
   useEffect(() => {
-    async function getLocation() {
-      const userLocation = await getUserLocation();
-      setLocation(userLocation);
-    }
-    getLocation();
+    getUserLocation(setLocation);
   }, []);
+
+  useEffect(() => {
+    const fetchWeatherInfo = async () => {
+      if (city) {
+        const data = await getWeatherForCity(city);
+        setWeatherInfo(data);
+      } else if (longitude && latitude) {
+        const data = await getWeatherForCoordinates({
+          latitude,
+          longitude,
+        });
+        setWeatherInfo(data);
+      } else {
+        setWeatherInfo(null);
+      }
+    };
+
+    fetchWeatherInfo();
+  }, [longitude, latitude, city]);
 
   return (
     <View>
       <Searchbar
         placeholder="Search for a city"
-        value={citySearch}
-        onChangeText={setCitySearch}
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        onSubmitEditing={() => setCity(searchQuery)}
         style={styles.searchbar}
       />
-      <WeatherInfoDisplay data={weatherInfoDisplayMocks} />
+      <WeatherInfoDisplay data={weatherInfo} />
     </View>
   );
 };

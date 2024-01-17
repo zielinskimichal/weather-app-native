@@ -1,7 +1,8 @@
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { WeatherService } from './weather.service';
 import { WeatherResponseDto } from './dto/weather.response.dto';
+import { GetWeatherByCoordinatesDto } from './dto/get-weather-by-coordinates.dto';
 
 @ApiTags('weather')
 @Controller('weather')
@@ -20,7 +21,6 @@ export class WeatherController {
   @Get(':city')
   async getByCity(@Param('city') city: string): Promise<WeatherResponseDto> {
     const res = await this.weatherService.getWeatherForCity(city);
-    console.log(res);
     return res;
   }
 
@@ -33,13 +33,15 @@ export class WeatherController {
     description: 'Returns the weather for a given lat/lon pair.',
     type: WeatherResponseDto,
   })
-  @Get('coordinates/:lat/:lon')
+  @Get()
   async getByLatLon(
-    @Param('lat') lat: number,
-    @Param('lon') lon: number,
+    @Query() getWeatherByCoordinatesDto: GetWeatherByCoordinatesDto,
   ): Promise<WeatherResponseDto> {
-    const res = await this.weatherService.getWeatherForCoordinates(lat, lon);
-    console.log(res);
+    const { longitude, latitude } = getWeatherByCoordinatesDto;
+    const res = await this.weatherService.getWeatherForCoordinates(
+      latitude,
+      longitude,
+    );
     return res;
   }
 }
