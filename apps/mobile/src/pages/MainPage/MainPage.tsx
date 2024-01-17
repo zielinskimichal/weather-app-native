@@ -22,37 +22,35 @@ export const MainPage = () => {
     getUserLocation(setLocation);
   }, []);
 
+  // I know this looks terrible, the intent is to fetch weather info for a city when user types one and attempt
+  // to fetch weather info for user's location when user allows the app to use their location. The typed query takes
+  // precedence over the user's location.
   useEffect(() => {
     const fetchWeatherInfo = async () => {
       setLoading(true);
+
       if (city) {
         const data = await getWeatherForCity(city);
         setWeatherInfo(data);
-        if (!data) {
-          setError("Please enter a valid city");
-        } else {
-          setError(null);
-        }
+        setError(data ? null : "Please enter a valid city");
       } else if (longitude && latitude) {
         const data = await getWeatherForCoordinates({
           latitude,
           longitude,
         });
         setWeatherInfo(data);
-        if (!data) {
-          setError("Unexpected error occurred");
-        } else {
-          setError(null);
-        }
+        setError(data ? null : "Unexpected error occurred");
       } else {
         setWeatherInfo(null);
         setError(null);
       }
+
       setLoading(false);
     };
 
     fetchWeatherInfo();
   }, [longitude, latitude, city]);
+  console.log(longitude, latitude);
 
   return (
     <View>
